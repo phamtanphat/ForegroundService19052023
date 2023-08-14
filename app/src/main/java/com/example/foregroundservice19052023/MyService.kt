@@ -12,6 +12,8 @@ import androidx.core.app.NotificationCompat
 
 class MyService : Service() {
     private val CHANNEL_ID = "my_channel"
+    private var notification: Notification? = null
+    private lateinit var notificationManager: NotificationManager
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -19,6 +21,9 @@ class MyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notification = createNotification(this@MyService, notificationManager)
+        startForeground(1, notification)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
