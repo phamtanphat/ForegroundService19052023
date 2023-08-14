@@ -18,8 +18,14 @@ class MainActivity : AppCompatActivity() {
         btnStopService = findViewById(R.id.button_stop_service)
 
         btnStartService?.setOnClickListener {
+            val intent = Intent(this@MainActivity, MyService::class.java)
+            intent.putExtra("string", "hello")
+            startService(intent)
+        }
+
+        btnStopService?.setOnClickListener {
             val service = Intent(this@MainActivity, MyService::class.java)
-            startService(service)
+            stopService(service)
         }
     }
 }
