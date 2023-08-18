@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +15,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("BBB", "onCreate")
+
+        val messageFromService = intent.getStringExtra("open")
+        if (messageFromService?.isNotEmpty() == true) {
+            Toast.makeText(this, messageFromService, Toast.LENGTH_SHORT).show()
+        }
 
         btnStartService = findViewById(R.id.button_start_service)
         btnStopService = findViewById(R.id.button_stop_service)
@@ -28,30 +33,5 @@ class MainActivity : AppCompatActivity() {
             val service = Intent(this@MainActivity, MyService::class.java)
             stopService(service)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("BBB", "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("BBB", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("BBB", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("BBB", "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("BBB", "onDestroy")
     }
 }
