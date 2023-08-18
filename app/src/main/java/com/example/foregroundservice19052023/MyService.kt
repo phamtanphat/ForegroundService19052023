@@ -3,6 +3,7 @@ package com.example.foregroundservice19052023
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -41,7 +42,20 @@ class MyService : Service() {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
         notification.setContentTitle("Thong bao")
         notification.setContentText("App co phien ban moi")
-        notification.priority = NotificationCompat.PRIORITY_HIGH
+        notification.setSmallIcon(R.drawable.ic_launcher_background)
+        notification.priority = NotificationCompat.PRIORITY_DEFAULT
+
+        val intent = Intent(this@MyService, MainActivity::class.java)
+        intent.putExtra("open", "Open from service")
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        notification.setContentIntent(pendingIntent)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
