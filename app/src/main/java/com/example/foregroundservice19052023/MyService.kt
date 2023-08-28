@@ -128,4 +128,8 @@ class MyService : Service() {
             }
         }
     }
+
+    fun getCount(): Int {
+        return count
+    }
 }
