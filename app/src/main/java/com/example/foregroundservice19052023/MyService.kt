@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -15,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MyService : Service() {
     private val CHANNEL_ID = "my_channel"
@@ -22,9 +24,15 @@ class MyService : Service() {
     private lateinit var notificationManager: NotificationManager
     private var isStart = false
     private var count = 0
+    // Binder given to clients.
+    private val binder = MyBinder()
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+    inner class MyBinder: Binder() {
+        fun getService(): MyService = this@MyService
+    }
+
+    override fun onBind(p0: Intent?): IBinder {
+        return binder
     }
 
     override fun onCreate() {
@@ -95,7 +103,7 @@ class MyService : Service() {
             val notificationChannel = NotificationChannel(
                 CHANNEL_ID,
                 "Version new",
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_DEFAULT
             )
             notificationManager.createNotificationChannel(notificationChannel)
         }
@@ -108,7 +116,7 @@ class MyService : Service() {
             repeat(1000) {
                 delay(1000)
                 count++
-                with(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     notification = createNotification(
                         context = this@MyService,
                         title = "Loop count",
